@@ -1,7 +1,9 @@
+import 'dart:math';
+
 import 'package:dio/dio.dart';
 
 import 'models/prodResp/prodResp.dart';
-
+import 'models/product/product.dart';
 
 void main(List<String> arguments) async {
   Dio client = Dio();
@@ -10,8 +12,24 @@ void main(List<String> arguments) async {
   Response<dynamic> response = await client.get(url);
   ProdResp data = ProdResp.fromJson(response.data);
 
-  print(data.total);
+  List<Product> productMassive = data.products;
+  List<Product> resultMassive = [];
+  String brand = "Apple";
+  String textResult = "техника $brand:";
 
-  
 
+
+  for (Product element in productMassive) {
+    if (element.brand == "Apple") {
+      resultMassive.add(element); 
+    }
+  }
+  resultMassive = productMassive.where((el) => el.brand == "Apple").toList();
+  for (var element in resultMassive) {
+    textResult += '\n${element.title} за \$${element.price}';
+  }
+}
+
+bool filterCondition(Product product) {
+  return product.brand == "Apple";
 }
